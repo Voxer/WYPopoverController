@@ -718,7 +718,33 @@ static float edgeSizeFromCornerRadius(float cornerRadius) {
 
 #pragma mark - WYPopoverOverlayView
 
+@interface WYPopoverOverlayView ()
+    @property (nonatomic, strong) NSMutableArray* passthroughSnapshots;
+@end
+
 @implementation WYPopoverOverlayView
+
+- (void) layoutSubviews
+{
+    [super layoutSubviews];
+
+    [self.passthroughSnapshots makeObjectsPerformSelector: @selector(removeFromSuperview)];
+    [self.passthroughSnapshots removeAllObjects];
+
+    if (self.passthroughViews.count)
+    {
+        if (!self.passthroughSnapshots)
+            self.passthroughSnapshots = [NSMutableArray arrayWithCapacity: self.passthroughViews.count];
+        for (UIView* view in self.passthroughViews)
+        {
+            UIView* snapshot = [view snapshotViewAfterScreenUpdates: NO];
+            snapshot.userInteractionEnabled = NO;
+            snapshot.frame = [self convertRect: view.bounds fromView: view];
+            [self addSubview: snapshot];
+            [self.passthroughSnapshots addObject: snapshot];
+        }
+    }
+}
 
 - (UIView *)hitTest:(CGPoint)point withEvent:(UIEvent *)event {
   if (_testHits) {
