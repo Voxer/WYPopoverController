@@ -1825,6 +1825,16 @@ static WYPopoverTheme *defaultTheme_ = nil;
     UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:_backgroundView action:@selector(tapOut)];
     tap.cancelsTouchesInView = NO;
     [_overlayView addGestureRecognizer:tap];
+      
+      UISwipeGestureRecognizer* swipeHorizontal = [[UISwipeGestureRecognizer alloc] initWithTarget: _backgroundView action: @selector(tapOut)];
+      swipeHorizontal.direction            = (UISwipeGestureRecognizerDirectionLeft | UISwipeGestureRecognizerDirectionRight);
+      swipeHorizontal.cancelsTouchesInView = NO;
+      [_overlayView addGestureRecognizer: swipeHorizontal];
+      
+      UISwipeGestureRecognizer* swipeVertical = [[UISwipeGestureRecognizer alloc] initWithTarget: _backgroundView action: @selector(tapOut)];
+      swipeVertical.direction            = (UISwipeGestureRecognizerDirectionUp | UISwipeGestureRecognizerDirectionDown);
+      swipeVertical.cancelsTouchesInView = NO;
+      [_overlayView addGestureRecognizer: swipeVertical];
 
     if (self.dismissOnTap) {
       tap = [[UITapGestureRecognizer alloc] initWithTarget:_backgroundView action:@selector(tapOut)];
